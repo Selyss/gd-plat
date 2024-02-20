@@ -1,5 +1,5 @@
 [package]
-name = "gd-plat"
+name = "platfinder"
 version = "0.1.0"
 edition = "2021"
 
