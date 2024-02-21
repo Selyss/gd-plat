@@ -45,7 +45,8 @@ async fn main() {
 
 async fn get_data(time: chrono::DateTime<chrono::Utc>) -> Result<reqwest::Response, Error> {
     // TODO: need to filter after date uploaded
-    let mut headers = reqwest::header::HeaderMap::new(); headers.insert(
+    let mut headers = reqwest::header::HeaderMap::new();
+    headers.insert(
         reqwest::header::USER_AGENT,
         reqwest::header::HeaderValue::from_static(""),
     );
