@@ -8,6 +8,7 @@ use serenity::framework::standard::macros::{command, group};
 use serenity::framework::standard::{CommandResult, Configuration, StandardFramework};
 use serenity::model::channel::Message;
 use serenity::prelude::*;
+use std::collections::HashMap;
 
 #[group]
 #[commands(platfind)]
@@ -44,23 +45,33 @@ async fn main() {
 
 async fn get_data(time: chrono::DateTime<chrono::Utc>) -> Result<reqwest::Response, Error> {
     // TODO: need to filter after date uploaded
-    let request = [
-        ("secret", "Wmfd2893gb7"), // public secret
-        ("len", "5"),              // plat?
-        ("diff", "-2"),            // demon
-        ("star", "1"),
-    ];
+    let mut headers = reqwest::header::HeaderMap::new(); headers.insert(
+        reqwest::header::USER_AGENT,
+        reqwest::header::HeaderValue::from_static(""),
+    );
+
+    let mut data = HashMap::new();
+    // data.insert("len", "5");
+    // data.insert("diff", "-2");
+    // data.insert("star", "1");
+    // data.insert("secret", "Wmfd2893gb7");
+    data.insert("str", "bloodbath");
+    // data.insert("star", "1");
+    // data.insert("type", "0");
+    data.insert("secret", "Wmfd2893gb7");
 
     let client = reqwest::Client::new();
     let resp = client
         .post("http://www.boomlings.com/database/getGJLevels21.php")
-        .query(&request)
-        .header("User-Agent", "")
+        .query(&data)
+        .headers(headers)
         .send()
         .await?;
 
+    println!("{:?}", resp);
     Ok(resp)
 }
+
 #[command]
 async fn platfind(ctx: &Context, msg: &Message) -> CommandResult {
     let time = chrono::offset::Utc::now();
